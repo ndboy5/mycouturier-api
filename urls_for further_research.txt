@@ -1,0 +1,4 @@
+1. MongoDB and Graph Structure
+https://www.compose.com/articles/graph-data-with-mongodb/
+
+2. 
