@@ -1,7 +1,7 @@
 /*
 Clientele model is used by Tailors only to manage thier customers.
 Cliente-Provider relationship between Tailor and Customer is desirable but isn't mandatory here.
-Customer ID is also NOT mandatory but may be established at any time.
+Client ID is also NOT mandatory but may be established at any time.
 */
 const mongoose = require('mongoose');
 
@@ -12,6 +12,7 @@ const clienteleSchema = mongoose.Schema(
             ref:'Accounts',
             required: true,
         },
+        Name:String,
     measurement:{
         type: mongoose.Schema.ObjectId,
         ref: 'Measurements'

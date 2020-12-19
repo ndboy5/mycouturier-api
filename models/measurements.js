@@ -21,19 +21,10 @@ const measurementsSchema = new mongoose.Schema({
     required: true,
     enum: ["Inches", "Centimeters", "Millimeters", "Meters"]
   },
-  bust: Number,
-  highBust: Number,
-  waist: Number,
-  centerBack: Number,
-  crotchLength: Number,
-  hip: Number,
-  inseam: Number,
-  outseam: Number,
-  shoulder: Number,
-  ankle: Number,
-  neck: Number,
-  wrist: Number,
-  fullHeight: Number,
+  entries: {
+    type: Map,
+    of: Number
+  },
   isFavourite: Boolean,
   lastupdate: {
     type: Date,
@@ -47,5 +38,3 @@ const measurementsSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Measurements", measurementsSchema);
-
-//Text git push to dev branch
