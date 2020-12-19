@@ -19,7 +19,7 @@ const measurementsSchema = new mongoose.Schema({
   unitOfMeasure: {
     type: String,
     required: true,
-    enum: ["Inches", "Centimeters", "Millimeters", "Meters"]
+    enum: ["Inch", "cm", "mm", "Meter"]
   },
   entries: {
     type: Map,
