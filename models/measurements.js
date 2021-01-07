@@ -12,7 +12,10 @@ const measurementsSchema = new mongoose.Schema({
     enum: ["M", "F"],
   },
   forself: Boolean,
-  bodysizes: {
+   clothingStyle: {
+    type: Array, 
+    of: String,
+  }, entries: {
     type: Map, 
     of: Number,
   },
