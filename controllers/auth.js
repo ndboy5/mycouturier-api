@@ -21,21 +21,21 @@ sendTokenResponse(account, 200, res);
 
 
 
-//@desc   Login (for accounts already registered. It allows login via email or CODE or phone number)
+//@desc   Login (for accounts already registered. It allows login via email)
 //@route  POST /api/v1/auth/login
 //@access Public
 exports.login = asyncHandler(async (req, res, next) => {
 
-const { phone, password } = req.body;
+const { email, password } = req.body;
 //TODO: build functionality to enable login using email or phone number also
 
 //Validate code and password to ensure it isn't null 
-if(!phone || !password){
-  return next(new errorResponse('Please provide an email|phone and password', 400));
+if(!email || !password){
+  return next(new errorResponse('Please provide an email and password', 400));
 }
 
 //Check for if account exists in DB
-const account = await Accounts.findOne({phone}).select('+password');
+const account = await Accounts.findOne({email}).select('+password');
 if(!account){
   return next(new errorResponse('Invalid credentials. ', 401));
 }
@@ -93,10 +93,10 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 // @access    Public
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
   //TODO: modify this code to allow for use of either email or phone to perform password reset
-  const account = await Accounts.findOne({ phone: req.body.phone });
+  const account = await Accounts.findOne({ email: req.body.email });
 
   if (!account) {
-    return next(new errorResponse(`Sorry, there is no account with phone no ${req.body.phone}`, 404));
+    return next(new errorResponse(`Sorry, there is no account with phone no ${req.body.email}`, 404));
   }
 
   // Get reset token
@@ -183,7 +183,10 @@ const sendTokenResponse = (account, statusCode, res) => {
   res.status(statusCode).cookie('token', token, options)
      .json({
       success: true,
-      token
+      token,
+      id: account.id,
+      role: account.role,
+      name: account.firstname
     });
 };
 

@@ -16,13 +16,12 @@ const accountsSchema = mongoose.Schema({
         type: String,
         match: [/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
      , 'kindly enter a valid email address'],
-        required: [true, "Please enter an email address"], //TODO: Decide on which to be made compulsory between email and phone no
+        required: [true, "Please enter an email address"], 
         unique: [true, "This email is already registered"]
     },
     phone:{
       //TODO: develop a regex match for phone numbers or prefferably do so on the client side
       type: Number,
-      required: [true, 'Please enter a phone no'],
       unique: [true, "This phone number is already registered"]
     },
     password:{
@@ -36,7 +35,7 @@ const accountsSchema = mongoose.Schema({
     role: {
         type: String,
         required: true,
-        enum: ['admin','tailor', 'customer'], //TODO: Admin user is to be configured on the Database level 
+        enum: ['admin','designer', 'customer'], //TODO: Admin user is to be configured on the Database level 
         default: "customer"
     },
     selfRecords:[{
