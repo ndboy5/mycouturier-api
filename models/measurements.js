@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const measurementsSchema = new mongoose.Schema({
-  name: {
+  description: {
     type: String,
     required: true,
-    maxlength: 30
+    maxlength: 100
   },
   gender: {
     type: String,

@@ -28,6 +28,7 @@ exports.getMeasurement = asyncHandler( async(req, res, next)=>{
 });
 
 exports.postMeasurements = asyncHandler( async (req, res, next)=>{
+    console.log("Here's what's on the request body: ", req.body);
     const measurement = await Measurements.create(req.body);
     res.status(201).json({success: true, data: measurement});
     console.log(measurement); //TODO: Delete
