@@ -42,6 +42,12 @@ const accountsSchema = mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref:'Measurements'
     }],
+    logintype:{
+      type: String,
+     required: true,
+     enum: ['DEF', 'FB'],
+     default: "DEF"
+    },
     createdAt: {
         type: Date,
         default: Date.now
