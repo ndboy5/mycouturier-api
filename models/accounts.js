@@ -26,10 +26,10 @@ const accountsSchema = mongoose.Schema({
     },
     password:{
         type: String,
-        required: [true, "please enter password"],
         select: false, //This hide the pwd where account object is selected
         minLength: 5
     },
+facebook_id: String,
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     role: {
@@ -67,7 +67,6 @@ if(!this.isModified('password')){
     const salt = await bcryptjs.genSalt(10);
     this.password = await bcryptjs.hash(this.password, salt);
 });
-
 
 /*
 Methods called after accessing collection in the DB

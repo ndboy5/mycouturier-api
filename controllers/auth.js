@@ -20,15 +20,44 @@ sendTokenResponse(account, 200, res);
 });
 
 
+//@desc This call handles facebook registration 
+//@route POST /api/v1/auth/register/facebook
+//@access Public
+exports.fb_register = asyncHandler(async(req, res, next) => {
+  //TODO: This code still feels insecure after the facebook authentication is completed
+const { code, surname, firstname, email, facebook_id,  role } = req.body; //Note: fb_login users do not need passwords
+if (!facebook_id) return next(new Response('No facebook_id', 400));
+
+const account  =  await Accounts.create({
+  code, surname, firstname, email, facebook_id, role
+})
+//Generate token for new Facebooklogin user
+sendTokenResponse(account, 200, res);
+});
+
+//@desc This call handles facebook login
+//@route POST /api/v1/auth/login/facebook
+//@access Public
+exports.fb_login = asyncHandler(async (req, res, next) =>{
+//TODO: Review this code for security challenges
+const { facebook_id } = req.body;
+//Validate the credentials
+if (!facebook_id) return next(new Response('No facebook_id', 400));
+
+//Check if user already exists in DB
+const account = await Accounts.findOne({facebook_id});
+if(!account){ return next(new errorResponse(`Invalid credentials. User not yet registered via Facebook`, 401)); }
+
+//To generate token for now account and send as response
+sendTokenResponse(account, 200, res);
+console.log(`facebook user ${account.surname} logged in successfully`) //TODO: Remove this for production env
+});
 
 //@desc   Login (for accounts already registered. It allows login via email)
 //@route  POST /api/v1/auth/login
 //@access Public
 exports.login = asyncHandler(async (req, res, next) => {
-
 const { email, password } = req.body;
-//TODO: build functionality to enable login using email or phone number also
-
 //Validate code and password to ensure it isn't null 
 if(!email || !password){
   return next(new errorResponse('Please provide an email and password', 400));
