@@ -25,14 +25,21 @@ sendTokenResponse(account, 200, res);
 //@access Public
 exports.fb_register = asyncHandler(async(req, res, next) => {
   //TODO: This code still feels insecure after the facebook authentication is completed
-const { surname, firstname, email, facebook_id,  role } = req.body; //Note: fb_login users do not need passwords
-if (!facebook_id) return next(new Response('No facebook_id', 400));
+const { surname, firstname, email, password, facebook_id,  role } = req.body; //Note: fb_login users do not need passwords
+ if (!facebook_id) return next(new Response('No facebook_id', 400));
 
 const account  =  await Accounts.create({
-  surname, firstname, email, facebook_id, role
-})
+  surname, firstname, email, password, facebook_id, role
+});
+  console.log("account details"); //TODO: for test purposes
+
 //Generate token for new Facebooklogin user
-sendTokenResponse(account, 200, res);
+ sendTokenResponse(account, 200, res);
+
+  // res.status(200)
+  //    .json({
+  //     success: true,
+  //   });
 });
 
 //@desc This call handles facebook login
@@ -44,7 +51,7 @@ const { facebook_id } = req.body;
 //Validate the credentials
 if (!facebook_id) return next(new Response('No facebook_id', 400));
 
-//Check if user already exists in DB
+//Check if user exists in DB
 const account = await Accounts.findOne({facebook_id});
 if(!account){ return next(new errorResponse(`Invalid credentials. User not yet registered via Facebook`, 401)); }
 
