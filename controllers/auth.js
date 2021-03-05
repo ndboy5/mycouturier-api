@@ -9,10 +9,10 @@ const  sendEmail  = require('../utils/sendmail');
 //@route POST /api/v1/auth/register
 //@access Public
 exports.register = asyncHandler(async (req, res, next) => {
-const { code, surname, firstname, email, phone, password, role } = req.body;
+const { surname, firstname, email, phone, password, role } = req.body;
 
 const account = await Accounts.create({
-    code, surname, firstname, email, phone, password, role
+    surname, firstname, email, phone, password, role
 });
 
 //To generate token for now account and send as response
@@ -25,11 +25,11 @@ sendTokenResponse(account, 200, res);
 //@access Public
 exports.fb_register = asyncHandler(async(req, res, next) => {
   //TODO: This code still feels insecure after the facebook authentication is completed
-const { code, surname, firstname, email, facebook_id,  role } = req.body; //Note: fb_login users do not need passwords
+const { surname, firstname, email, facebook_id,  role } = req.body; //Note: fb_login users do not need passwords
 if (!facebook_id) return next(new Response('No facebook_id', 400));
 
 const account  =  await Accounts.create({
-  code, surname, firstname, email, facebook_id, role
+  surname, firstname, email, facebook_id, role
 })
 //Generate token for new Facebooklogin user
 sendTokenResponse(account, 200, res);
