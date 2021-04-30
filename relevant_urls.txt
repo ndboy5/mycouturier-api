@@ -1,0 +1,7 @@
+1. MongoDB and Graph Structure
+https://www.compose.com/articles/graph-data-with-mongodb/
+
+2. HOSTING: SSL setup on NGINX
+https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
+
+3.
