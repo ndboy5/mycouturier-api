@@ -3,6 +3,11 @@ const express = require('express');
 const dotenv = require('dotenv');
 const logger = require('./middleware/logger');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
 const errorHandler = require('./middleware/error');
 const morgan = require('morgan');
 const connectDB = require('./config/db');
@@ -31,6 +36,24 @@ This section is used to Load Express Libraries
 app.use(express.json());
 //use cookie parser
 app.use(cookieParser());
+
+//use helmet for additional security and such as cross-site attacks
+app.use(helmet());
+//prevent xss attacks i.e no script tags in our data
+app.use(xss());
+
+//Enable CORS 
+app.use(cors());
+
+// Add request rate limit
+const rateLimiter = rateLimit({
+  windowMs: 10*60*1000, // 10 mins
+  max: 70 //max of 100 aPI calls in 10min
+})
+ app.use(rateLimiter);
+
+ //Prevent http param pollution
+ app.use(hpp());
 
 /**
  * This section is used to link express with the external libraries such as middleware libraries
