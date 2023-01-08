@@ -48,3 +48,6 @@ Thumbs.db
 *.mov
 *.wmv
 
+# remove config files from source code
+config/config.env
+config/config.env.env
