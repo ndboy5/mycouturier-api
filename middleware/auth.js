@@ -1,20 +1,21 @@
 /* This auth middlewear is used to protect sensitive routes on the server and to ensure only authorised access to resources
 It verifies tokens and returns an account _id which will be used to manage the logged in user
 */
-const jwt = require('jsonwebtoken');
-const asyncHandler = require('./async');
-const ErrorResponse = require('../utils/errorResponse');
-const Account = require('../models/accounts');
+const jwt = require("jsonwebtoken");
+const asyncHandler = require("./async");
+const ErrorResponse = require("../utils/errorResponse");
+const Account = require("../models/accounts");
 
 // Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {
   let token;
 
   if (
-    req.headers.authorization && req.headers.authorization.startsWith('Bearer')
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
   ) {
     // Set token from Bearer token in the authorization header of the web/mobile client.
-    token = req.headers.authorization.split(' ')[1];
+    token = req.headers.authorization.split(" ")[1];
 
     // TODO: Alternatively set the token from token from cookie with the below code
   }
@@ -22,10 +23,9 @@ exports.protect = asyncHandler(async (req, res, next) => {
   //   token = req.cookies.token;
   // }
 
-
   // Test to ensure that the token exists
   if (!token) {
-    return next(new ErrorResponse('Not authorized to access this route', 401));
+    return next(new ErrorResponse("Not authorized to access this route", 401));
   }
 
   try {
@@ -36,10 +36,9 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
     next();
   } catch (err) {
-    return next(new ErrorResponse('Not authorized to access this route', 401));
+    return next(new ErrorResponse("Not authorized to access this route", 401));
   }
 });
-
 
 // Grants access to specific account roles
 exports.authorize = (...roles) => {

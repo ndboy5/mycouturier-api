@@ -1,31 +1,37 @@
 const mongoose = require("mongoose");
 
 const measurementsSchema = new mongoose.Schema({
-  description: {
+  name: {
     type: String,
     required: true,
-    maxlength: 100
+    maxlength: 100,
+  },
+  description: {
+    type: String,
+    required: false,
+    maxlength: 300,
   },
   gender: {
     type: String,
     required: true,
     enum: ["M", "F"],
   },
-  forself: Boolean,
-   clothingStyle: {
-    type: Array, 
-    of: String,
-  }, entries: {
-    type: Map, 
-    of: Number,
-  },
-  createdBy:{
+  createdBy: {
     type: mongoose.Schema.ObjectId,
-    ref:'Accounts'
+    ref: "Accounts",
   },
-  lastupdateBy: {
-type: mongoose.Schema.ObjectId,
-ref: 'Accounts'
+  owner: {
+    type: String,
+    required: false,
+    maxlength: 50,
+  },
+  ownerId: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Accounts",
+  },
+  lastUpdateBy: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Accounts",
   },
   isFavourite: Boolean,
   createdAt: {
@@ -33,7 +39,38 @@ ref: 'Accounts'
     default: Date.now,
   },
   lastSyncTime: Date,
-    lastUpdateDate:Date,
+  lastUpdateDate: Date,
+  type: {
+    type: String,
+    required: true,
+    enum: ["Free Hand", "Pattern Drafting"],
+  },
+  unit: {
+    type: String,
+    required: true,
+    enum: ["CM", "Inch", "M", "MM"],
+  },
+
+  upperBodyMeasure: {
+    type: Map,
+    of: Number,
+  },
+  lowerBodyMeasure: {
+    type: Map,
+    of: Number,
+  },
+  bodiceMeasure: {
+    type: Map,
+    of: Number,
+  },
+  skirtMeasure: {
+    type: Map,
+    of: Number,
+  },
+  trouserMeasure: {
+    type: Map,
+    of: Number,
+  },
 });
 
 module.exports = mongoose.model("Measurements", measurementsSchema);
