@@ -8,10 +8,12 @@ const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
 const cors = require('cors');
-const errorHandler = require('./middleware/error');
+const { Server } = require("socket.io");
+const errorHandler = require('./middleware/0'); 
 const morgan = require('morgan');
 const connectDB = require('./config/db');
 
+const io = new Server(server);
 
 // Load the environment variables using dotenv package
 dotenv.config({path: './config/config.env'});
@@ -57,7 +59,7 @@ const rateLimiter = rateLimit({
 
 /**
  * This section is used to link express with the external libraries such as middleware libraries
- */
+ */ 
 //enable our middleware logger. This may also be disabled for production environment
 app.use(logger); 
 
