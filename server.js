@@ -1,31 +1,32 @@
-const path = require('path');
-const express = require('express');
-const dotenv = require('dotenv');
-const logger = require('./middleware/logger');
-const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const xss = require('xss-clean');
-const rateLimit = require('express-rate-limit');
-const hpp = require('hpp');
-const cors = require('cors');
+const path = require("path");
+const express = require("express");
+const dotenv = require("dotenv");
+const logger = require("./middleware/logger");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
+const cors = require("cors");
 const { Server } = require("socket.io");
-const errorHandler = require('./middleware/0'); 
-const morgan = require('morgan');
-const connectDB = require('./config/db');
+const errorHandler = require("./middleware/0");
+const morgan = require("morgan");
+const connectDB = require("./config/db");
 
 const io = new Server(server);
 
 // Load the environment variables using dotenv package
-dotenv.config({path: './config/config.env'});
+dotenv.config({ path: "./config/config.env" });
 
 connectDB();
 
 //import/load the API's route files
-const measurements = require('./routes/measurements');
-const account = require('./routes/accounts');
-const relationship = require('./routes/relationship');
-const clientele = require('./routes/clientele');
-const auth = require('./routes/auth');
+const measurements = require("./routes/measurements");
+const account = require("./routes/accounts");
+const relationship = require("./routes/relationship");
+const clientele = require("./routes/clientele");
+const auth = require("./routes/auth");
+const { Socket } = require("dgram");
 
 // Load Express API
 const app = express();
@@ -44,48 +45,57 @@ app.use(helmet());
 //prevent xss attacks i.e no script tags in our data
 app.use(xss());
 
-//Enable CORS 
+//Enable CORS
 app.use(cors());
 
 // Add request rate limit
 const rateLimiter = rateLimit({
-  windowMs: 10*60*1000, // 10 mins
-  max: 70 //max of 100 aPI calls in 10min
-})
- app.use(rateLimiter);
+  windowMs: 10 * 60 * 1000, // 10 mins
+  max: 70, //max of 100 aPI calls in 10min
+});
+app.use(rateLimiter);
 
- //Prevent http param pollution
- app.use(hpp());
+//Prevent http param pollution
+app.use(hpp());
 
+//setup the socket.io chat server
+io.on("connection", (socket) => {
+  console.log("socket connected at last");
+});
 /**
  * This section is used to link express with the external libraries such as middleware libraries
- */ 
+ */
 //enable our middleware logger. This may also be disabled for production environment
-app.use(logger); 
+app.use(logger);
 
 // Morgan logging middleware for only the development environment
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
 }
 
 //mount routers
-app.use('/api/v1/measurements', measurements);
-app.use('/api/v1/accounts', account);
-app.use('/api/v1/relationship', relationship);
-app.use('/api/v1/clientele', clientele);
-app.use('/api/v1/auth', auth);
+app.use("/api/v1/measurements", measurements);
+app.use("/api/v1/accounts", account);
+app.use("/api/v1/relationship", relationship);
+app.use("/api/v1/clientele", clientele);
+app.use("/api/v1/auth", auth);
 
 //Note: Error handler (middleware) must come after the routers and not before it.
 app.use(errorHandler);
 
 //Load the process environments
-const PORT = process.env.PORT; 
+const PORT = process.env.PORT;
 
-const server = app.listen(PORT, console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`));
+const server = app.listen(
+  PORT,
+  console.log(
+    `Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
+  )
+);
 
-// Handle unhandled promise rejections 
-process.on('unhandledRejection', (err, promise) => {
+// Handle unhandled promise rejections
+process.on("unhandledRejection", (err, promise) => {
   console.log(`Error: ${err.message}`.red);
   // Close server & exit process if unhandled exceptions like DB connection is encountered
- // server.close(() => process.exit(1));
+  // server.close(() => process.exit(1));
 });
