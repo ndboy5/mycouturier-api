@@ -8,13 +8,10 @@ const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
 const cors = require("cors");
-const { Server } = require("socket.io");
-const errorHandler = require("./middleware/0");
+const errorHandler = require("./middleware/error");
 const morgan = require("morgan");
 const connectDB = require("./config/db");
-
-const io = new Server(server);
-
+const socket = require("socket.io");
 // Load the environment variables using dotenv package
 dotenv.config({ path: "./config/config.env" });
 
@@ -23,7 +20,6 @@ connectDB();
 //import/load the API's route files
 const measurements = require("./routes/measurements");
 const account = require("./routes/accounts");
-const relationship = require("./routes/relationship");
 const clientele = require("./routes/clientele");
 const auth = require("./routes/auth");
 const { Socket } = require("dgram");
@@ -58,10 +54,6 @@ app.use(rateLimiter);
 //Prevent http param pollution
 app.use(hpp());
 
-//setup the socket.io chat server
-io.on("connection", (socket) => {
-  console.log("socket connected at last");
-});
 /**
  * This section is used to link express with the external libraries such as middleware libraries
  */
@@ -76,7 +68,6 @@ if (process.env.NODE_ENV === "development") {
 //mount routers
 app.use("/api/v1/measurements", measurements);
 app.use("/api/v1/accounts", account);
-app.use("/api/v1/relationship", relationship);
 app.use("/api/v1/clientele", clientele);
 app.use("/api/v1/auth", auth);
 
@@ -92,6 +83,20 @@ const server = app.listen(
     `Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
   )
 );
+
+//setup the socket.io chat server
+const io = socket(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true,
+  },
+});
+io.on("connection", (socket) => {
+  console.log("socket connected at last");
+  socket.on("disconnect", (arg) => {
+    console.log("someone just disconnected");
+  });
+});
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
