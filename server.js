@@ -11,7 +11,6 @@ const cors = require("cors");
 const errorHandler = require("./middleware/error");
 const morgan = require("morgan");
 const connectDB = require("./config/db");
-const socket = require("socket.io");
 // Load the environment variables using dotenv package
 dotenv.config({ path: "./config/config.env" });
 
@@ -22,7 +21,7 @@ const measurements = require("./routes/measurements");
 const account = require("./routes/accounts");
 const clientele = require("./routes/clientele");
 const auth = require("./routes/auth");
-const { Socket } = require("dgram");
+// const { Socket } = require("dgram");
 
 // Load Express API
 const app = express();
@@ -83,20 +82,6 @@ const server = app.listen(
     `Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
   )
 );
-
-//setup the socket.io chat server
-const io = socket(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    credentials: true,
-  },
-});
-io.on("connection", (socket) => {
-  console.log("socket connected at last");
-  socket.on("disconnect", (arg) => {
-    console.log("someone just disconnected");
-  });
-});
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
