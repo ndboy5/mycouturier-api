@@ -2,23 +2,9 @@ const mongoose = require("mongoose");
 
 const messagesSchema = new mongoose.Schema({
   text: String,
-  account: {
+  chatRoom: {
     type: String,
     required: true,
-  },
-  topic: {
-    type: String,
-    required: true,
-  },
-  likes: {
-    type: Number,
-    default: 0,
-    required: false,
-  },
-  dislikes: {
-    type: Number,
-    default: 0,
-    required: false,
   },
   reactions: [reactionSchema],
   timestamp: {
