@@ -2,7 +2,13 @@ const express = require("express");
 const { protect } = require("../middleware/auth");
 
 //use destructuring to import controller functions
-const { getTopic, getTopics, deleteTopic , postTopic } = require("../controllers/topics");
+const {
+  getTopic,
+  getTopics,
+  deleteTopic,
+  postTopic,
+  postCommentInTopic,
+} = require("../controllers/topics");
 
 //Bring in the Router
 const router = express.Router();
@@ -11,6 +17,7 @@ const router = express.Router();
 
 //re-route the URLs/URI to thier various destination functions in the controller
 router.route("/").get(getTopics).post(postTopic);
+router.route("/post").post(postCommentInTopic);
 
 router.route("/:id").get(getTopic).delete(protect, deleteTopic);
 module.exports = router;

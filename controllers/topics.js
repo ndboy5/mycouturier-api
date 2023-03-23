@@ -21,22 +21,28 @@ exports.getTopics = asyncHandler(async (req, res, next) => {
 */
 exports.getTopic = asyncHandler(async (req, res, next) => {
   const topic = await Topics.findById(req.params.id);
-  // const posts = await Posts
+  const posts = await Posts.find({ topic: topic._id }).exec();
+
   //TODO: find the posts under the topics before sending to the client
   if (!topic) {
     return next(
       new ErrorResponse(`Topic with ID of ${req.params.id} not found`, 404)
     );
   }
-  res.status(200).json({ success: true, data: topic });
+  res.status(200).json({ success: true, data: { ...topic, posts } });
 });
 
-exports.postTopic = asyncHandler( async (req, res, next)=>{
-    console.log("Here's what's on the request body: ", req.body);
-    const topic = await Topics.create(req.body);
-    res.status(201).json({success: true, data: topic});
-    console.log(topic); //TODO: Delete
+exports.postTopic = asyncHandler(async (req, res, next) => {
+  console.log("Here's what's on the request body: ", req.body);
+  const topic = await Topics.create(req.body);
+  res.status(201).json({ success: true, data: topic });
 });
+
+exports.postCommentInTopic = asyncHandler(async (req, res, next) => {
+  const post = await Posts.create(req.body);
+  res.status(201).json({ success: true, data: post });
+});
+
 /*
 @desc Removes a single topic 
 */
