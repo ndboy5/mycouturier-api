@@ -29,7 +29,7 @@ exports.getTopic = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Topic with ID of ${req.params.id} not found`, 404)
     );
   }
-  res.status(200).json({ success: true, data: { ...topic, posts } });
+  res.status(200).json({ success: true, data: { ...topic._doc, posts } });
 });
 
 exports.postTopic = asyncHandler(async (req, res, next) => {
