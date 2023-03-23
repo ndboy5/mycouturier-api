@@ -20,7 +20,6 @@ const postsSchema = new mongoose.Schema({
     default: 0,
     required: false,
   },
-  reactions: [reactionSchema],
   timestamp: {
     type: Date,
     default: Date.now,

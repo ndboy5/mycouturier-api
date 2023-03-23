@@ -9,6 +9,7 @@ const topicsSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  isOpen: Boolean,
   createdBy: {
     type: mongoose.Schema.ObjectId,
     ref: "accounts",

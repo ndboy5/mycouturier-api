@@ -31,6 +31,12 @@ exports.getTopic = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: topic });
 });
 
+exports.postTopic = asyncHandler( async (req, res, next)=>{
+    console.log("Here's what's on the request body: ", req.body);
+    const topic = await Topics.create(req.body);
+    res.status(201).json({success: true, data: topic});
+    console.log(topic); //TODO: Delete
+});
 /*
 @desc Removes a single topic 
 */
