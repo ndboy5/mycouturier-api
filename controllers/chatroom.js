@@ -8,7 +8,7 @@ const asyncHandler = require("../middleware/async");
 @desc Returns the details of a single chat room along with its messages
 The current design is to have one-on-one chats only between users
 */
-exports.getTopic = asyncHandler(async (req, res, next) => {
+exports.getChatById = asyncHandler(async (req, res, next) => {
   const chatRoom = await ChatRoom.findById(req.params.id);
   const messages = await Messages.find({ messages: chatRoom._id }).exec();
 
@@ -18,35 +18,37 @@ exports.getTopic = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Chat room with ID of ${req.params.id} not found`, 404)
     );
   }
-  res.status(200).json({ success: true, data: { ...topic._doc, posts } });
+  res.status(200).json({ success: true, data: { ...chatRoom._doc, messages } });
 });
 
-exports.postTopic = asyncHandler(async (req, res, next) => {
-  console.log("Here's what's on the request body: ", req.body);
-  const topic = await Topics.create(req.body);
-  res.status(201).json({ success: true, data: topic });
+//This function opens a new chatroom for discussion
+//It is assumed that the accounts chatroom field has been checked if a
+// discussion/chatroom exists before creating a new chatroom with same user
+exports.postChatRoom = asyncHandler(async (req, res, next) => {
+  const chatRoom = await ChatRoom.create(req.body);
+  res.status(201).json({ success: true, data: chatRoom });
 });
 
-exports.postCommentInTopic = asyncHandler(async (req, res, next) => {
-  const post = await Posts.create(req.body);
-  res.status(201).json({ success: true, data: post });
+exports.postMessageInChatRoom = asyncHandler(async (req, res, next) => {
+  const message = await Messages.create(req.body);
+  res.status(201).json({ success: true, data: message });
 });
 
 /*
-@desc Removes a single topic 
+@desc Removes a single message in chat room 
 */
-exports.deleteTopic = asyncHandler(async (req, res, next) => {
-  const topic = await Topics.deleteOne(req.params.id);
+exports.deleteMessage = asyncHandler(async (req, res, next) => {
+  const message = await Messages.deleteOne(req.params.id);
 
-  if (!topic) {
+  if (!message) {
     return next(
       new ErrorResponse(
-        `Measurement with ID of ${req.params.id} not found`,
+        `Chat message with ID of ${req.params.id} not found`,
         404
       )
     );
   }
-  console.log(topic); //TODO: Delete
+  console.log(message); //TODO: Delete
 
   res
     .status(200)

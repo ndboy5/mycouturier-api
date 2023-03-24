@@ -22,6 +22,7 @@ const account = require("./routes/accounts");
 const clientele = require("./routes/clientele");
 const auth = require("./routes/auth");
 const topics = require("./routes/topics");
+const chatRoom = require("./routes/chatRoom");
 // const { Socket } = require("dgram");
 
 // Load Express API
@@ -71,6 +72,7 @@ app.use("/api/v1/accounts", account);
 app.use("/api/v1/clientele", clientele);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/topics", topics);
+app.use("/api/v1/chat", chatRoom);
 
 //Note: Error handler (middleware) must come after the routers and not before it.
 app.use(errorHandler);
