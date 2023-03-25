@@ -2,11 +2,14 @@ const mongoose = require("mongoose");
 
 const messagesSchema = new mongoose.Schema({
   text: String,
+  sender: {
+    type: String,
+    required: true,
+  },
   chatRoom: {
     type: String,
     required: true,
   },
-  reactions: [reactionSchema],
   timestamp: {
     type: Date,
     default: Date.now,

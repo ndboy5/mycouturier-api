@@ -10,7 +10,7 @@ The current design is to have one-on-one chats only between users
 */
 exports.getChatById = asyncHandler(async (req, res, next) => {
   const chatRoom = await ChatRoom.findById(req.params.id);
-  const messages = await Messages.find({ messages: chatRoom._id }).exec();
+  const messages = await Messages.find({ chatRoom: chatRoom._id }).exec();
 
   //TODO: find the posts under the topics before sending to the client
   if (!chatRoom) {
