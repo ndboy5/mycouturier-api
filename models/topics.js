@@ -9,6 +9,10 @@ const topicsSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  numberOfPosts: {
+    type: Number,
+    required: false,
+  },
   isOpen: Boolean,
   createdBy: {
     type: mongoose.Schema.ObjectId,
