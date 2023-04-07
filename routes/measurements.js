@@ -15,7 +15,7 @@ const router = express.Router();
 //re-route the URLs/URI to thier various destination functions in the controller
 router.route('/')
 .get(getMeasurements)
-.post(protect, postMeasurements)
+.post( postMeasurements)
 .delete(protect, deleteMeasurements);
 
 router.route('/:id')

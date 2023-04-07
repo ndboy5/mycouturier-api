@@ -22,7 +22,7 @@ const account = require("./routes/accounts");
 const clientele = require("./routes/clientele");
 const auth = require("./routes/auth");
 const topics = require("./routes/topics");
-const chatRoom = require("./routes/chatRoom");
+const chatRoom = require("./routes/chatroom");
 // const { Socket } = require("dgram");
 
 // Load Express API

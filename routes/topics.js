@@ -16,8 +16,8 @@ const router = express.Router();
 //TODO: Complete the destinations
 
 //re-route the URLs/URI to thier various destination functions in the controller
-router.route("/").get(getTopics).post(postTopic);
-router.route("/post").post(postCommentInTopic);
+router.route("/").get(getTopics).post(protect, postTopic);
+router.route("/post").post(protect, postCommentInTopic);
 
 router.route("/:id").get(getTopic).delete(protect, deleteTopic);
 module.exports = router;
