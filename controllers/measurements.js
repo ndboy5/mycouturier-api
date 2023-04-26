@@ -11,7 +11,7 @@ exports.getMeasurements = asyncHandler(async (req, res, next) => {
   if (!measurements) {
     return next(new ErrorResponse("Measurements not found", 404));
   }
-  console.log(measurements);
+  console.log("measurements retrieved");
   res.status(200).json({ success: true, data: measurements });
 });
 
