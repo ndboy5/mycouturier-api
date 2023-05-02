@@ -6,6 +6,7 @@ const { protect } = require("../middleware/auth");
 const {
   getMeasurements,
   getMeasurement,
+  getMeasurementsByAccount,
   postMeasurements,
   deleteMeasurements,
   deleteMeasurement,
@@ -24,4 +25,5 @@ router
   .delete(protect, deleteMeasurements);
 
 router.route("/:id").get(getMeasurement).delete(protect, deleteMeasurement);
+router.route("/account/:ownerId").get(protect, getMeasurementsByAccount);
 module.exports = router;

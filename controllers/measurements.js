@@ -15,6 +15,22 @@ exports.getMeasurements = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: measurements });
 });
 
+exports.getMeasurementsByAccount = asyncHandler(async (req, res, next) => {
+  const measurements = await Measurements.find({
+    ownerId: req.params.ownerId,
+  }).exec();
+
+  if (!measurements) {
+    return next(
+      new ErrorResponse(
+        `No measurement found for owner id ${req.params.ownerId} `,
+        404
+      )
+    );
+  }
+  res.status(200).json({ success: true, data: measurements });
+});
+
 exports.getMeasurement = asyncHandler(async (req, res, next) => {
   const measurement = await Measurements.findById(req.params.id);
 
