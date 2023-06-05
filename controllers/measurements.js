@@ -2,6 +2,7 @@ const path = require("path");
 const Measurements = require("../models/measurements");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
+const mongoose = require("mongoose");
 
 //@desc Get the measurements
 //@route Get /api/v1/measurements
@@ -16,10 +17,13 @@ exports.getMeasurements = asyncHandler(async (req, res, next) => {
 });
 
 exports.getMeasurementsByAccount = asyncHandler(async (req, res, next) => {
+  // console.log(req.params.ownerId);
+  const ownerIdObj = mongoose.Types.ObjectId(req.params.ownerId);
   const measurements = await Measurements.find({
-    ownerId: req.params.ownerId,
+    ownerId: ownerIdObj,
+    // ownerId: req.params.ownerId,
   }).exec();
-
+  // console.log(measurements);
   if (!measurements) {
     return next(
       new ErrorResponse(
@@ -28,6 +32,7 @@ exports.getMeasurementsByAccount = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
   res.status(200).json({ success: true, data: measurements });
 });
 
@@ -53,7 +58,18 @@ exports.postMeasurements = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteMeasurement = asyncHandler(async (req, res, next) => {
-  const measurement = await Measurements.deleteOne(req.params.id);
+  const measurement = await Measurements.deleteOne(
+    { _id: req.params.id },
+    (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(
+          "Successfully deleted meausrement with id " + req.params.id
+        );
+      }
+    }
+  );
 
   if (!measurement) {
     return next(

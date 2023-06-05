@@ -1,5 +1,13 @@
 const mongoose = require("mongoose");
 
+const measurementSchema = new mongoose.Schema(
+  {
+    name: String,
+    size: Number,
+  }
+  // { _id: false }
+);
+
 const measurementsSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -51,26 +59,11 @@ const measurementsSchema = new mongoose.Schema({
     enum: ["CM", "Inch", "M", "MM"],
   },
 
-  upperBodyMeasure: {
-    type: Map,
-    of: Number,
-  },
-  lowerBodyMeasure: {
-    type: Map,
-    of: Number,
-  },
-  bodiceMeasure: {
-    type: Map,
-    of: Number,
-  },
-  skirtMeasure: {
-    type: Map,
-    of: Number,
-  },
-  trouserMeasure: {
-    type: Map,
-    of: Number,
-  },
+  upperBodyMeasure: [measurementSchema],
+  lowerBodyMeasure: [measurementSchema],
+  bodiceMeasure: [measurementSchema],
+  skirtMeasure: [measurementSchema],
+  trouserMeasure: [measurementSchema],
 });
 
 module.exports = mongoose.model("Measurements", measurementsSchema);

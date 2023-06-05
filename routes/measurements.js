@@ -24,6 +24,6 @@ router
   .post(postMeasurements)
   .delete(protect, deleteMeasurements);
 
+router.route("/account/:ownerId").get(getMeasurementsByAccount);
 router.route("/:id").get(getMeasurement).delete(protect, deleteMeasurement);
-router.route("/account/:ownerId").get(protect, getMeasurementsByAccount);
 module.exports = router;
